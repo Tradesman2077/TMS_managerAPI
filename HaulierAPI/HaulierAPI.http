@@ -1,0 +1,6 @@
+@HaulierAPI_HostAddress = http://localhost:5058
+
+GET {{HaulierAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

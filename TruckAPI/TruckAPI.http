@@ -1,0 +1,6 @@
+@TruckAPI_HostAddress = http://localhost:5037
+
+GET {{TruckAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
