@@ -10,6 +10,7 @@ namespace SharedData.Result
     {
         public int TruckId { get; set; }
         public DateTime Date { get; set; }
-        public decimal Tonnage { get; set; }
+        public decimal NettTonnage { get; set; }
+        public decimal GrossTonnage { get; set; }
     }
 }

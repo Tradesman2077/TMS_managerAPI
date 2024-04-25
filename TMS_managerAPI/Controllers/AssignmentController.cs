@@ -28,6 +28,23 @@ namespace TMS_managerAPI.Controllers
                 .ToListAsync();
         }
 
+        [HttpGet("search-by-dates")]
+        public async Task<ActionResult<IEnumerable<Assignment>>> GetByDates(DateTime start, DateTime end)
+        {
+            var searchByDatesResults =  await _context.Assignments
+                .Where(x => x.ArrivalTime >= start && x.DepartureTime <= end)
+                .Include(h => h.Haulier)
+                .Include(d => d.Driver)
+                .Include(t => t.Truck)
+                .ToListAsync();
+
+            if (searchByDatesResults == null){
+                return NotFound();
+            }
+
+                return searchByDatesResults;
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Assignment>> GetAssignment(int id)
         {
@@ -55,7 +72,9 @@ namespace TMS_managerAPI.Controllers
                 {
                     TruckId = group.Key.TruckId,
                     Date = group.Key.Date,
-                    Tonnage = group.Sum(assignment => assignment.NettWeight)
+                    NettTonnage = group.Sum(assignment => assignment.NettWeight),
+                    GrossTonnage = group.Sum(assignment => assignment.GrossWeight)
+
                 })
                 .ToList();
 
@@ -75,7 +94,10 @@ namespace TMS_managerAPI.Controllers
 
                 })
                 .ToList();
-
+            if(averageTurnAroundTimePerHaulier == null)
+            {
+                return Ok("No data found");
+            }
             return averageTurnAroundTimePerHaulier;
         }
 
