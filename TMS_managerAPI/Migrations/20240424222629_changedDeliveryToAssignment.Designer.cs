@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TMS_managerAPI.DB;
 
@@ -11,9 +12,11 @@ using TMS_managerAPI.DB;
 namespace TMS_managerAPI.Migrations
 {
     [DbContext(typeof(TMSDbContext))]
-    partial class TMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240424222629_changedDeliveryToAssignment")]
+    partial class changedDeliveryToAssignment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,6 +58,12 @@ namespace TMS_managerAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("HaulierId");
+
+                    b.HasIndex("TruckId");
 
                     b.ToTable("Assignments");
                 });
@@ -105,6 +114,9 @@ namespace TMS_managerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<decimal>("Capacity")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("HaulierId")
                         .HasColumnType("int");
 
@@ -117,6 +129,33 @@ namespace TMS_managerAPI.Migrations
                     b.HasIndex("HaulierId");
 
                     b.ToTable("Trucks");
+                });
+
+            modelBuilder.Entity("SharedData.Models.Assignment", b =>
+                {
+                    b.HasOne("SharedData.Models.Driver", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedData.Models.Haulier", "Haulier")
+                        .WithMany()
+                        .HasForeignKey("HaulierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedData.Models.Truck", "Truck")
+                        .WithMany()
+                        .HasForeignKey("TruckId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Haulier");
+
+                    b.Navigation("Truck");
                 });
 
             modelBuilder.Entity("SharedData.Models.Truck", b =>

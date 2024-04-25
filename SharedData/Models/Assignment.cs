@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SharedData.Models
 {
-    public class Delivery
+    public class Assignment
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
         [ForeignKey("Driver")]
         public int DriverId { get; set; }
 
@@ -21,9 +23,5 @@ namespace SharedData.Models
         public decimal TareWeight { get; set; }
         public decimal GrossWeight { get; set; }
         public decimal NettWeight { get; set; }
-
-        public Truck Truck { get; set; }
-        public Driver Driver { get; set; }
-        public Haulier Haulier { get; set; }
     }
 }

@@ -1,0 +1,10 @@
+﻿{
+  "connString": "Data Source=CHRISTOPHERS_PC\\MSSQLSERVER01;Initial Catalog=TMS;Integrated Security=True;Trust Server Certificate=True",
+  "queries": {
+    "tonnagePerTruckPerDay": "SELECT TruckId, DATE(ArrivalTime) AS Date, SUM(NettWeight) AS Tonnage FROM Assignments WHERE DATE(ArrivalTime) = ? AND DATE(DepartureTime) = ? GROUP BY TruckId, DATE(ArrivalTime)",
+
+    "averageTurnAroundTimePerHaulier": "SELECT HaulierId, AVG(TIMESTAMPDIFF(HOUR, ArrivalTime, DepartureTime)) AS AverageTurnAroundTime FROM Assignments GROUP BY HaulierId",
+
+    "averageTurnAroundTimePerDriver": "SELECT DriverId, AVG(TIMESTAMPDIFF(HOUR, ArrivalTime, DepartureTime)) AS AverageTurnAroundTime FROM Assignments GROUP BY DriverId"
+  }
+}
