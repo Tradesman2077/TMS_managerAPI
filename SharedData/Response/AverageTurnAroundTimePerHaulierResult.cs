@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedData.Result
+namespace SharedData.Response
 {
-    public class AverageTurnAroundTimePerDriverResult
+    public class AverageTurnAroundTimePerHaulierResult
     {
-        public int DriverId { get; set; }
+        public int HaulierId { get; set; }
         public TimeSpan AverageTurnAroundTime { get; set; }
     }
 }

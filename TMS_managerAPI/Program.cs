@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using System;
 using TMS_managerAPI.DB;
 
@@ -8,7 +9,7 @@ var connString = builder.Configuration.GetConnectionString("TMS");
 builder.Services.AddDbContext<TMSDbContext>(options =>
         options.UseSqlServer(connString));
 // Add services to the container.
-
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

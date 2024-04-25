@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SharedData.Models;
-using SharedData.Result;
+using SharedData.Request;
+using SharedData.Response;
+using System.Text.Json.Nodes;
 using TMS_managerAPI.DB;
-using TMS_managerAPI.Utilities;
+using TMS_managerAPI.Utilities.Reporting;
 
 namespace TMS_managerAPI.Controllers
 {
@@ -126,6 +130,28 @@ namespace TMS_managerAPI.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAssignment", new { id = assignment.Id }, assignment);
+        }
+
+        [HttpPost("create-report")]
+        public async Task<IActionResult> GenerateReport([FromBody]List<Assignment> assignments)
+        {
+            if (assignments == null)
+            {
+                return BadRequest("No content");
+            }
+            Console.WriteLine(assignments);
+            try
+            {
+                string outputDirectory = "C:\\Users\\chris\\source\\repos\\TMS_managerAPI\\TMS_managerAPI\\Reports";
+
+                await Task.Run(() => ReportUtility.GenererateExcelfromList(assignments));
+
+                return Ok("Report generated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
