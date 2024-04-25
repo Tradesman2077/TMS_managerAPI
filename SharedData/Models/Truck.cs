@@ -13,6 +13,5 @@ namespace SharedData.Models
         [ForeignKey("Haulier")]
         public int HaulierId { get; set; }
 
-        public Haulier Haulier { get; set; }
     }
 }

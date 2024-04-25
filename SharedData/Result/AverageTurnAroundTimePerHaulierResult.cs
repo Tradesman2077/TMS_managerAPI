@@ -9,6 +9,6 @@ namespace SharedData.Result
     public class AverageTurnAroundTimePerHaulierResult
     {
         public int HaulierId { get; set; }
-        public double AverageTurnAroundTime { get; set; }
+        public TimeSpan AverageTurnAroundTime { get; set; }
     }
 }

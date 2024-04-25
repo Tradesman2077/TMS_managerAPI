@@ -21,15 +21,13 @@ namespace TruckAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Truck>>> GetTrucks()
         {
-            return await _context.Trucks.Include(t => t.Haulier).ToListAsync();
+            return await _context.Trucks.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Truck>> GetTruck(int id)
         {
-            var truck = await _context.Trucks
-                                     .Include(t => t.Haulier)
-                                     .FirstOrDefaultAsync(t => t.Id == id);
+            var truck = await _context.Trucks.FirstOrDefaultAsync(t => t.Id == id);
 
             if (truck == null)
             {
@@ -43,7 +41,6 @@ namespace TruckAPI.Controllers
         public async Task<ActionResult<IEnumerable<Truck>>> GetTruckByReg(string reg)
         {
             var trucks = await _context.Trucks
-                                    .Include(t => t.Haulier)
                                     .Where(x => x.Registration == reg)
                                     .ToListAsync();
 
@@ -58,7 +55,7 @@ namespace TruckAPI.Controllers
         [HttpGet("haul/{id}")]
         public async Task<ActionResult<IEnumerable<Truck>>> GetTruckByHaulierId(int id)
         {
-            var trucks = await _context.Trucks.Where(x => x.Haulier.Id == id).ToListAsync();
+            var trucks = await _context.Trucks.Where(x => x.HaulierId == id).ToListAsync();
             if (trucks == null)
             {
                 return NotFound();

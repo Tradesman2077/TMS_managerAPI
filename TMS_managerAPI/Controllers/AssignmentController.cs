@@ -21,14 +21,22 @@ namespace TMS_managerAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Assignment>>> GetAssignments()
         {
-            return await _context.Assignments.ToListAsync();
+            return await _context.Assignments
+                .Include(h => h.Haulier)
+                .Include(t => t.Truck)
+                .Include(d => d.Driver)
+                .ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Assignment>> GetAssignment(int id)
         {
-            var assignment = await _context.Assignments.FindAsync(id);
-
+            var assignment = await _context.Assignments
+                .Include(h => h.Haulier)
+                .Include(t => t.Truck)
+                .Include(d => d.Driver)
+                .FirstOrDefaultAsync(a => a.Id == id); ;
+                   
             if (assignment == null)
             {
                 return NotFound();
@@ -63,7 +71,8 @@ namespace TMS_managerAPI.Controllers
                 .Select(group => new AverageTurnAroundTimePerHaulierResult
                 {
                     HaulierId = group.Key,
-                    AverageTurnAroundTime = group.Average(assignment => (assignment.DepartureTime - assignment.ArrivalTime).TotalHours)
+                    AverageTurnAroundTime = TimeSpan.FromHours(group.Average(assignment => (assignment.DepartureTime - assignment.ArrivalTime).TotalHours))
+
                 })
                 .ToList();
 
@@ -80,7 +89,8 @@ namespace TMS_managerAPI.Controllers
                 .Select(group => new AverageTurnAroundTimePerDriverResult
                 {
                     DriverId = group.Key,
-                    AverageTurnAroundTime = group.Average(assignment => (assignment.DepartureTime - assignment.ArrivalTime).TotalHours)
+                    AverageTurnAroundTime = TimeSpan.FromHours(group.Average(assignment => (assignment.DepartureTime - assignment.ArrivalTime).TotalHours))
+
                 })
                 .ToList();
 
